@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -19,6 +20,7 @@ import lombok.experimental.Accessors;
  * @since 2024-05-27
  */
 @Data
+@Slf4j
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="User对象", description="")

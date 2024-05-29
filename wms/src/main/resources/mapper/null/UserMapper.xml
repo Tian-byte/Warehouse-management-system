@@ -6,5 +6,13 @@
     <sql id="Base_Column_List">
         id, no, name, password, age, sex, phone, role_id, isValid
     </sql>
+    <select id="PageC" resultType="com.wms.entity.User">
+        select * from wms.user
+    </select>
+
+    <select id="PageCC" resultType="com.wms.entity.User">
+        select  * from  wms.user ${ew.customSqlSegment}
+    </select>
+
 
 </mapper>

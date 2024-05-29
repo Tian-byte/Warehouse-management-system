@@ -226,3 +226,61 @@ public class CodeGenerator {
 
 }
 ```
+
+### 四.实现增删改查 并用postman或者 Apifox 测试
+
+```java
+@GetMapping("/list")
+public List<User> list(){
+    return userService.list();
+}
+
+//新增
+@PostMapping("/save")
+public boolean save(@RequestBody User user){
+    return userService.save(user);
+}
+//修改
+@PostMapping("/mod")
+public boolean mod(@RequestBody User user){
+    return userService.updateById(user);
+}
+//新增或修改
+@PostMapping("/saveOrMod")
+public boolean saveOrMOd(@RequestBody User user){
+    return userService.saveOrUpdate(user);
+}
+//删除
+@GetMapping("/delete")
+public boolean delete(Integer id){
+    return userService.removeById(id);
+}
+//查询（模糊,匹配）
+@PostMapping("/listP")
+public List<User> listP(@RequestBody User user){
+    LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
+    lambdaQueryWrapper.eq(User::getName,user.getName());
+    return userService.list(lambdaQueryWrapper);
+}
+```
+
+### 五.分页的处理
+
+- 入参的分装
+
+```java
+package com.wms.common;
+
+import lombok.Data;
+
+@Data
+public class QueryPageParam {
+    //默认
+    private static int PAGE_SIZE=20;
+    private static int PAGE_NUM=1;
+
+    private int pageSize;
+    private int PageNum;
+}
+```
+
