@@ -284,3 +284,79 @@ public class QueryPageParam {
 }
 ```
 
+- 添加分页拦截器
+
+  ```java
+  package com.wms.common;
+  
+  import com.baomidou.mybatisplus.annotation.DbType;
+  import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+  import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+  import org.springframework.context.annotation.Bean;
+  import org.springframework.context.annotation.Configuration;
+  
+  @Configuration
+  public class MybatisPlusConfig {
+      @Bean
+      public MybatisPlusInterceptor mybatisPlusInterceptor(){
+          MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+          interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+          return interceptor;
+      }
+  }
+  ```
+
+- 编写分页的mapper方法
+- 自定义sql使用wapper
+
+### 六.返回前端数据的封装
+
+------
+
+[^让前端收到统一的数据，方便出路]: 
+
+```json
+{
+    Code:200//400,
+    Msg:"成功，失败",
+    Total:10,
+    Data:[]
+}
+
+
+```
+
+
+
+### 七.创建前端项目 vue
+
+```js
+vue create xxx(名字)
+```
+
+
+
+### 八.导入Element-ui
+
+*补充，vue脚手架（注意版本冲突） npm install -g @vue/cli*
+
+1.安装命令
+
+npm i element-ui -S
+
+2.mian.js全局引入
+
+```js
+import Vue from 'vue';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './App.vue';
+
+Vue.use(ElementUI);
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+});
+```
+
