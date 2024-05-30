@@ -8,9 +8,12 @@ import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
 import com.wms.entity.User;
 import com.wms.service.imp.UserService;
+import freemarker.template.utility.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.PresentationDirection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,10 +63,12 @@ public class UserController {
 
     //查询（模糊,匹配）
     @PostMapping("/listP")
-    public List<User> listP(@RequestBody User user) {
+    public Result listP(@RequestBody User user) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(User::getName, user.getName());
-        return userService.list(lambdaQueryWrapper);
+        if (StringUtils.isNotBlank(user.getName())){
+            lambdaQueryWrapper.like(User::getName, user.getName());
+        }
+       return Result.success(userService.list(lambdaQueryWrapper));
     }
 
     @PostMapping("/listPage")
