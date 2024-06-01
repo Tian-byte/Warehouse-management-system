@@ -380,3 +380,90 @@ new Vue({
 
 hearder 点击图标---提交 -- 》 父组件 父组件在去改变--》aside子组件（collapse)
 
+### 十三.安装axios与处理跨域
+
+**安装axios**
+
+npm install axios --save
+
+在main.js 全局引入axios
+
+import axios from 'axios';
+
+Vue.prototype.$axios = axios;
+
+**request.js配置文件封装如下：**
+
+```js
+// 接口请求封装：Vue基于axios封装request接口请求——request.js文件
+// Axios是一个基于promise的Ajax网络请求库，作用于node.js和浏览器中，在服务端它使用原生node.js http模块, 而在客户端 (浏览器端) 则使用XMLHttpRequests（XHR）
+import axios from 'axios'
+import router from '../router'
+
+// 1. 创建axios实例request
+const request = axios.create({
+    baseURL: "/api",  // 注意：这里是全局统一加上了'/api'前缀，即所有接口都会加上'/api'前缀，页面里面写接口的时候就不要加'/api'了，否则会出现2个'/api'，类似'/api/api/user'这样的报错，切记！！
+    timeout: 5000  // 请求超时时间
+})
+
+// 2. request添加请求拦截器：可以自请求发送前对请求做一些处理，比如统一加token，对请求参数统一加密
+request.interceptors.request.use(
+    config => {
+        config.headers['Content-Type'] = 'application/json;charset=utf-8';
+        config.headers["token"] = sessionStorage.getItem("token")
+        // config.headers['token'] = user.token;  // 设置请求头
+
+        // 取出sessionStorage里面缓存的用户信息，是json字符串
+        /*let userJson = sessionStorage.getItem("user")
+        if (!userJson) {
+            router.push("/login")  // 若登录用户信息为空则跳转至登录页面
+        }*/
+        return config
+    },
+    error => {
+        return Promise.reject(error)
+    }
+);
+
+// 3. response添加响应拦截器：可以在接口响应后统一处理结果
+request.interceptors.response.use(
+    response => {
+        let res = response.data;  // 使用axios动态获取response里的data数据。存储token到localStorage
+        if (res.code == 401) {
+            router.push("/")
+            localStorage.clear()
+            sessionStorage.clear()
+        }
+        // 如果是返回的文件（blob）
+        if (response.config.responseType === 'blob') {
+            return response
+        }
+        // 兼容服务端返回的字符串数据
+        if (typeof res === 'string') {
+            res = res ? JSON.parse(res) : res
+        }
+        return res;
+    },
+    error => {
+        console.log('err' + error)  // for debug
+        return Promise.reject(error)
+    }
+)
+
+export default request
+
+```
+
+
+
+### 十四.列表展示
+
+![image-20240531223009221](F:\Warehouse-management-system\img\image-20240531223009221.png)
+
+1. 列表数据
+2. 用tag 转换列
+3. header-cell-style设置表头样式
+4. 加上边框
+5. 按钮（编辑和删除）
+6. 后端返回结果分装（Result)
+

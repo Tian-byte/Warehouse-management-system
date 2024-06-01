@@ -1,6 +1,21 @@
-
-
 <template>
+  <div>
+    <div style="margin-bottom: 5px;">
+      <el-input v-model="name" placeholder="请输入姓名" suffix-icon="el-icon-search" style="width: 200px;"
+      @keyup.enter.native="loadPost"></el-input>
+      <el-select style="margin-left: 5px;" v-model="sex" filterable placeholder="请选择性别">
+        <el-option
+            v-for="item in sexs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button  type="primary" style="margin-left: 5px;" @click="loadPost" >查询</el-button>
+      <el-button type="success" @click="resetParam" >重置</el-button>
+
+      <el-button  type="primary" style="margin-left: 5px;" @click="add" >新增</el-button>
+    </div>
   <el-table :data="tableData"
             :header-cell-style="{background:'#f3f6fd',color:'#555'}"
             border
@@ -38,6 +53,29 @@
                      @click="handleDelete(scope.$index, scope.row)">删除</el-button>
     </el-table-column>
   </el-table>
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 20, 30]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+    </el-pagination>
+    <el-dialog
+        title="提示"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        :before-close="handleClose"
+        center
+       >
+      <span>需要注意的是内容是默认不居中的</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -45,19 +83,67 @@ export default {
   name:"Main",
   data() {
     return {
-      tableData:[]
+      tableData:[],
+      pageSize:10,
+      pageNum:1,
+      total:0,
+      name:'',
+      sex:'',
+      sexs:[
+        {
+          value: '1',
+          label: '男'
+        }, {
+          value: '2',
+          label: '女'
+        },
+      ],
+      centerDialogVisible:false
     }
   },
   methods:{
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});},
+    add(){
+      this.centerDialogVisible =true
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.pageNum = 1
+      this.pageSize = val
+      this.loadPost()
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.pageNum = val
+      this.loadPost()
+    },
     loadGet(){
       this.$axios.get(this.$httpUrl + '/user/list').then(res=>res.data).then(res =>{
-        console.log(res);
+        console.log(res)
       })
     },
+    resetParam(){
+      this.name=''
+      this.sex =''
+      this.loadPost()
+    },
     loadPost(){
-      this.$axios.post(  this.$httpUrl + '/user/listP',{}).then(res=>res.data).then(res =>{
+      this.$axios.post(this.$httpUrl + '/user/listPageC1',{
+        pageSize:this.pageSize,
+        pageNum:this.pageNum,
+        param:{
+          name:this.name,
+          sex: this.sex
+        }
+      }).then(res=>res.data).then(res =>{
         console.log(res);
         if (res.code === 200){
+          this.total = res.total
           this.tableData=res.data
         }else {
           alert('获取数据失败')

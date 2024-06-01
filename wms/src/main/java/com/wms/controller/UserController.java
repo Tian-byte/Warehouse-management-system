@@ -114,11 +114,19 @@ public class UserController {
         //System.out.println(query);
         HashMap param = query.getParam();
         String name = (String) param.get("name");
-        Page<User> page = new Page(1, 2);
+        String sex = (String) param.get("sex");
+        Page<User> page = new Page();
         page.setPages(query.getPageNum());
         page.setSize(query.getPageSize());
+
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.like(User::getName, name);
+        if (StringUtils.isNotBlank(name) && !"null".equals(name)){
+            lambdaQueryWrapper.like(User::getName, name);
+        }
+        if (StringUtils.isNotBlank(sex)){
+            lambdaQueryWrapper.eq(User::getSex, sex);
+        }
+
         //IPage result = userService.pageC(page);
         IPage result = userService.pageCC(page, lambdaQueryWrapper);
         System.out.println("total=== "+result.getTotal());
