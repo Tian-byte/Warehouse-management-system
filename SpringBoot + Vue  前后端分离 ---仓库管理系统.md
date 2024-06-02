@@ -467,3 +467,81 @@ export default request
 5. 按钮（编辑和删除）
 6. 后端返回结果分装（Result)
 
+### 十五.分页处理
+
+1. 页面加上分页代码
+2. 修改查询方式和参数
+3. 处理翻页，设置条数逻辑（注意一个问题）
+
+### 十六.查询处理
+
+1. 查询的布局（包含 查询，清空按钮）
+2. 输入框
+3. 下拉表
+4. 回车事件（查询）
+5. 重置处理
+
+### 十七.新增
+
+1. 新增按钮
+
+2. 弹出窗口
+
+3. 编写表单
+
+4. 提交数据(提示信息，列表刷新)
+
+5. 数据的提交
+
+   数据的校验
+
+   ```JS
+   rules: {
+     no: [
+       {required: true, message: '请输入账号', trigger: 'blur'},
+       {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
+     ],
+       name: [
+         {required: true, message: '请输入姓名', trigger: 'blur'},
+       ],
+     password: [
+       {required: true, message: '请输入密码', trigger: 'blur'},
+       {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
+     ],
+     age: [
+       { validator: checkAge, trigger: 'blur' }
+     ],
+     phone:[
+       { validator: checkPhone, trigger: 'blur' }
+     ]
+   }
+   ```
+
+6.账号的唯一验证
+
+7.表单重置
+
+### 十八.编辑和删除操作
+
+编辑：
+
+1. 传递数据提交表单
+2. 提交数据到后台
+3. 表单重置
+
+删除
+
+1. 获取数据id
+2. 提交到后台
+
+### 十九.登录功能的实现
+
+1. 登录页面
+2. 后台查询代码
+3. 登录页面的路由
+
+- 安装路由插件（npm  | vue-router@3.5.4)
+- 创建路由文件
+
+
+

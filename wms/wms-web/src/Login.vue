@@ -61,7 +61,7 @@ export default {
     login() {
       this.$refs['loginForm'].validate((valid) => {
         if (valid) {
-          request.post('/admin/login', this.admin).then(res => {
+          request.post( this.$httpUrl + '/user/login', this.admin).then(res => {
             if (res.code === '200') {
               this.loginAdmin = res.data  //滑块组件出现
             } else {

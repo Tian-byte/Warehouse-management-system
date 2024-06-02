@@ -3,6 +3,7 @@ package com.wms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wms.common.QueryPageParam;
 import com.wms.common.Result;
@@ -32,17 +33,31 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/list")
     public List<User> list() {
         return userService.list();
     }
-
+    @GetMapping("/findByNo")
+    public Result findByNo(@RequestParam String no){
+        List list =  userService.lambdaQuery().eq(User::getNo,no).list();
+        if (!list.isEmpty()){
+            return  Result.success(list);
+        }else {
+            return Result.fail();
+        }
+    }
     //新增
     @PostMapping("/save")
-    public boolean save(@RequestBody User user) {
-        return userService.save(user);
+    public Result save(@RequestBody User user) {
+        return userService.save(user) ? Result.success() : Result.fail();
     }
 
+    // 新增
+    @PostMapping("/update")
+    public Result update(@RequestBody User user){
+        return userService.updateById(user) ? Result.success() : Result.fail();
+    }
     //修改
     @PostMapping("/mod")
     public boolean mod(@RequestBody User user) {
@@ -55,10 +70,19 @@ public class UserController {
         return userService.saveOrUpdate(user);
     }
 
+
+    // 登录 login
+    @PostMapping("/login")
+    public Result login(@RequestBody User user){
+        List list = userService.lambdaQuery().eq(User:: getNo,user.getNo())
+                .eq(User:: getPassword,user.getPassword()).list();
+        return !list.isEmpty() ? Result.success(list.get(0)): Result.fail();
+    }
+
     //删除
     @GetMapping("/delete")
-    public boolean delete(Integer id) {
-        return userService.removeById(id);
+    public Result delete(@RequestParam String id) {
+        return userService.removeById(id)? Result.success():Result.fail();
     }
 
     //查询（模糊,匹配）
@@ -116,7 +140,7 @@ public class UserController {
         String name = (String) param.get("name");
         String sex = (String) param.get("sex");
         Page<User> page = new Page();
-        page.setPages(query.getPageNum());
+        page.setCurrent(query.getPageNum());
         page.setSize(query.getPageSize());
 
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
