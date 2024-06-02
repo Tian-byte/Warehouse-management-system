@@ -232,15 +232,17 @@ export default {
       this.$axios.get(this.$httpUrl+'/user/delete?id='+id).then(res=>res.data).then(res=>{
         console.log(res)
         if (res.code === 200){
-          this.$message({
+          this.$notify({
             message:'删除成功!',
-            type:'success'
+            type:'success',
+            duration:1000
           });
           this.loadPost()
         }else {
-          this.$message({
+          this.$notify({
             message:'删除失败',
-            type:'error'
+            type:'error',
+            duration:1000
           });
         }
       })
@@ -256,17 +258,19 @@ export default {
       this.$axios.post(this.$httpUrl+'/user/save',this.form).then(res=>res.data).then(res=>{
         console.log(res)
         if (res.code === 200){
-          this.$message({
+          this.$notify({
             message:'新增成功!',
-            type:'success'
+            type:'success',
+            duration: 1000
           });
           this.centerDialogVisible = false
           this.loadPost()
           this.resetForm()
         }else {
-          this.$message({
+          this.$notify({
             message:'新增失败',
-            type:'error'
+            type:'error',
+            duration: 1000
           });
         }
       })
@@ -275,17 +279,19 @@ export default {
       this.$axios.post(this.$httpUrl+'/user/update',this.form).then(res=>res.data).then(res=>{
         console.log(res)
         if (res.code === 200){
-          this.$message({
+          this.$notify({
             message:'新增成功!',
-            type:'success'
+            type:'success',
+            duration:1000
           });
           this.centerDialogVisible = false
           this.loadPost()
           this.resetForm()
         }else {
-          this.$message({
+          this.$notify({
             message:'新增失败',
-            type:'error'
+            type:'error',
+            duration:1000
           });
         }
       })
@@ -347,7 +353,11 @@ export default {
           this.tableData = res.data
           this.total = res.total
         } else {
-          alert('获取数据失败')
+          this.$notify({
+            message:'获取数据失败!',
+            type:'warning',
+            duration: 1000
+          })
         }
       })
     },

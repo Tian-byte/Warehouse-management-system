@@ -545,3 +545,30 @@ export default request
 
 
 
+### 二十.退出登录
+
+1. 展示姓名
+2. 退出登录事件
+3. 退出跳转，清除相关数据
+4. 退出确认
+
+### 二十一.首页个人中心
+
+1. 编写页面
+
+2. 路由跳转
+
+3. 路由错误解决
+
+   ```js
+   const  VueRouterPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push (to){
+     return VueRouterPush.call(this,to).catch(err => err)
+   }
+   ```
+
+### 二十一. 菜单跳转
+
+1. 菜单增加router 高亮
+2. 配置子菜单
+3. 模拟动态menu

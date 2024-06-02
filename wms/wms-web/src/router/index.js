@@ -1,24 +1,37 @@
-import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/', name: 'login', component: () =>import('../components/Login')
   },
   {
-    path: '/about', name: 'about', component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    path: '/Index', name: 'index', component: () =>import('../components/Index'),
+    children:[
+      {
+        path:'/Home',
+        name:'home',
+        meta:{title:'首页'},
+        component:() => import('../components/Home')
+      },
+      {
+        path:'/Admin',name:'admin', meta:{title:'管理员管理'}, component:() => import('../components/admin/AdminManage.vue')
+      },
+      {
+        path:'/User',name:'user', meta:{title:'用户管理'}, component:() => import('../components/user/UserManage.vue')
+      },
+    ]
+  },
+
+
+
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
-
+const  VueRouterPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (to){
+  return VueRouterPush.call(this, to).catch(err => err)
+}
 export default router

@@ -1,7 +1,7 @@
 <!--左边导航-->
 <template>
-  <el-container style="height: 100%; border: 1px solid #eee">
-    <el-aside :width="aside_width"  style="background-color: rgb(238, 241, 246);margin-left: -1px ">
+  <el-container style="height: 100%; border: 1px solid #eee"> 
+    <el-aside :width="aside_width"  style=" height: 100vh; background-color: rgb(238, 241, 246);margin-left: -1px ">
     <Aside :isCollapse="isCollapse"></Aside>
     </el-aside>
 <!--    头部页面-->
@@ -11,7 +11,8 @@
       </el-header>
 <!--      主页面-->
       <el-main style="height: 100%">
-        <Main></Main>
+<!--        <Main></Main>-->
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -20,10 +21,10 @@
 <script>
 import Aside from "@/components/Aside.vue";
 import Header from "@/components/Header.vue";
-import Main from "@/components/Main.vue";
+
 export default {
   name: "Index",
-  components: {Main, Header, Aside},
+  components: { Header, Aside},
   data(){
     return{
       isCollapse:false,
