@@ -3,7 +3,7 @@
       background-color="#535c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      style="height: 100vh;"
+      style="height: 100%;"
       default-active="/Home"
       :collapse="isCollapse"
       :collapse-transition="false"
